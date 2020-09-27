@@ -15,8 +15,13 @@ bool Node::setActivation(double (*activation)(double)) {
     this->activation = activation;
     return true;
 }
+bool Node::setDevOfActivation(double (*devOfActivation)(double)) {
+    this->devOfActivation = devOfActivation;
+    return true;
+}
 
 double Node::forward(vector<double> input) {
+    this->x = input;
     int len = w.size();
     double output = 0.0;
     for(int i = 0; i<len; i++) {
@@ -24,6 +29,18 @@ double Node::forward(vector<double> input) {
     }
     output-=bias;
     return activation(output);
+}
+
+vector<double> Node::backward(double error, double c) {
+    vector<double> err;
+    double constant = c * error * devOfActivation(error);
+    int len = w.size();
+    bias -= constant;
+    for(int i = 0; i < len; i++){
+        err.push_back(constant * w[i]);
+        w[i] += constant * x[i];
+    }
+    return err;
 }
 
 void Node::print() {
