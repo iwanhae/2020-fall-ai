@@ -3,7 +3,7 @@
         {
             "type": "shell",
             "label": "C/C++: g++-7 build active file",
-            "command": "/usr/bin/g++-7",
+            "command": "/usr/bin/g++",
             "args": [
                 "-g",
                 "${workspaceFolder}/*.cpp",
