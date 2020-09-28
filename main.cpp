@@ -14,7 +14,7 @@ vector<aim> data = {
     {{0, 0}, 0},
     {{1, 0}, 1},
     {{0, 1}, 1},
-    {{1, 1}, 0}
+    {{1, 1}, 1}
 };
 
 //-1.0 ~ 1.0 사이의 임의의 실수 구하는 함수
@@ -27,7 +27,7 @@ int main()
 
     //단일 노드
     Node singleNode;
-    //아주 단순한 binary Activation 함수
+    // Sigmoid와 Derivative of the Sigmoid 함수
     auto f = [](double x) -> double { return 1 / (1 + std::exp(-x)); };
     auto devf = [](double x) -> double { auto f = [](double x) -> double { return 1 / (1 + std::exp(-x)); }; return f(x)*(1-f(x)); };
 
@@ -38,8 +38,7 @@ int main()
     singleNode.setDevOfActivation(devf);
 
     int iter = 0;
-    bool pass = false;
-    while (!pass) {        
+    while (true) {        
         iter++;
         double error = 0;
         for(auto set : data) {          
@@ -48,9 +47,10 @@ int main()
             singleNode.backward(out - in, 0.1);
             error += (in - out) * (in - out);
         }
+        cout << "iter: " << iter << "\terror: " << error << endl;
+        // iter 1000 번을 수행하던가 error 가 0.01 이하면 종료
         if(iter == 1000) break;
-        if (error < 0.1) break;
-        cout << error << endl;
+        if (error < 0.01) break;
         /*
         // matlab으로 그래프 출력용
         cout << "y = [ y; (";

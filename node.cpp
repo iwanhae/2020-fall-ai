@@ -44,10 +44,13 @@ vector<double> Node::backward(double error, double c) {
 }
 
 void Node::print() {
-    // int count = 0;
-    // cout << "bias :\t" << this->bias << endl;
-    //  for(auto w : this->w) cout << "weight " << count++ << ":\t" << w << endl;
-    // cout << this->w[0] << "x + " << this->w[1] << "y = " << this->bias << endl; 
-    double tmp = this->bias / this->w[1];
+    int count = 0;
+    cout << "bias :\t" << this->bias << endl;
+    for(auto w : this->w) cout << "weight " << count++ << ":\t" << w << endl;
+    
+    /*
+    // matlab 그래프 그리는용 출력
+    double tmp = this->bias / this->w[1];    
     cout << -(this->w[0] / this->w[1]) << "*x " << ((tmp >= 0) ? "+" : "") << tmp;
+    */
 }
