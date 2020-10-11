@@ -1,13 +1,16 @@
 #include <iostream>
+#include <functional>
 #include "node.h"
 
 
 bool Node::setWeight(vector<double> w) {
     this->w = w;
+    while(w.size() != dw.size()) dw.push_back(0.0);
     return true;
 }
 bool Node::setBias(double b) {
     this->bias = b;
+    this -> db = 0;
     return true;
 }
 
@@ -27,30 +30,34 @@ double Node::forward(vector<double> input) {
     for(int i = 0; i<len; i++) {
         output += input.at(i) * w.at(i);
     }
-    output-=bias;
+    output+=bias;
     return activation(output);
 }
 
 vector<double> Node::backward(double error, double c) {
     vector<double> err;
-    double constant = c * error * devOfActivation(error);
     int len = w.size();
-    bias -= constant;
+    double net = 0;
+    for(int i = 0; i < len; i++) net += x[i] * w[i];
+    net += bias;
+    double constant = c * error * devOfActivation(net);
+    bias += constant;
     for(int i = 0; i < len; i++){
         err.push_back(constant * w[i]);
         w[i] += constant * x[i];
     }
+    backward_count++;
     return err;
 }
+
 
 void Node::print() {
     int count = 0;
     cout << "bias :\t" << this->bias << endl;
     for(auto w : this->w) cout << "weight " << count++ << ":\t" << w << endl;
-    
-    /*
-    // matlab 그래프 그리는용 출력
-    double tmp = this->bias / this->w[1];    
-    cout << -(this->w[0] / this->w[1]) << "*x " << ((tmp >= 0) ? "+" : "") << tmp;
-    */
+}
+
+// 입력이 두개인 상황 한정, 현재 노드상태를 직선으로 출력해준다.
+function<double (double)> Node::printFunc() {
+    return [&](double x) -> double { return (this->w[0]*x + this->bias)/(-w[1]); };
 }
