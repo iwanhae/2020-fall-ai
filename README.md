@@ -1,26 +1,58 @@
-# 1주차 결과보고서
+## 과제 #2 입력이 n차원인 perceptron learning 구현
 
-### 최종 결과의 2차원 직선 그래프 
-![](./img/and_gate.gif)
+## meta
 
-0.69x+0.63y-0.74>0
+| 제목       | 내용                                                        |
+| ---------- | ----------------------------------------------------------- |
+| 작성자     | 2016920036 컴퓨터과학부 이완해                              |
+| 실행환경   | Linux 5.4.0-48-generic / gcc version 8.3.0 (Debian 8.3.0-6) |
+| 개발환경   | vscode + c/c++ plugin (.vscode 이하 내용 참조)              |
+| 컴파일방법 | g++ -g *.cpp -o main                                        |
+| 결과물     | ./main                                                      |
 
-```bash
-0       0       GOOD
-0       0       GOOD
-0       0       GOOD
-1       1       GOOD
-bias :  0.74
-weight 0:       0.69
-weight 1:       0.63
+## 결과 보고서
+
+유의미한 오류 변화율을 측정하기위해 Activation function은 Sigmoid 함수를 사용하였고, 이 함수에 대한 정의는 `main.cpp`에 다음과 같이 정의가 되어있다.
+
+```cpp
+// Sigmoid와 Derivative of the Sigmoid 함수
+auto f = [](double x) -> double { return 1 / (1 + std::exp(-x)); };
+auto devf = [](double x) -> double { auto f = [](double x) -> double { return 1 / (1 + std::exp(-x)); }; return f(x)*(1-f(x)); };
 ```
 
-### 어떤 값을 입력해야 무한 loop에서 빨리 나올 수 있는가?
-and 게이트역할을 할 수 있는 노드는 다음을 만족해야한다.
+학습과정 그래프 변화는 매 iteration 마다 현재 노드상태를 수식상태로 뽑아낸 후 gnu octave 를 통해 시각화 하였다. 세부적인 코드는 [여기](./report/plot.m)서 확인 가능하다.
 
- 1. 음의 방향성을 가지며
- 2. (1, 1) 아래를 지나며
- 3. (1, 0) 과 (0, 1) 위를 지난다.
+### AND Gate
 
-위 세가지를 만족하도록 weight 값과 bias 값의 범위를 한정지으면 (예시: w1, w2 부호가 같으며 같은값을 가지게) 좀 더 빠르게 결과를 도출해 낼 수 있다.
+* 학습과정 그래프 변화
 
+  ![](./report/and_gate.gif)
+
+* Iteration에 따른 오류 변화
+
+  <img src="./report/and_error.png" style="zoom: 33%;" />
+
+### OR Gate
+
+* 학습과정 그래프 변화
+
+  ![](./report/or_gate.gif)
+
+* Iteration에 따른 오류 변화
+
+  <img src="./report/or_error.png" style="zoom: 33%;" />
+  
+### XOR Gate
+
+* 학습과정 그래프 변화
+
+  ![](./report/xor_gate.gif)
+
+* Iteration에 따른 오류 변화
+
+  <img src="./report/xor_error.png" style="zoom: 33%;" />
+  
+* 분석
+
+  * 미리 예상했던바와같이 단일노드로는 XOR Gate 학습에 실패하였다.
+  * 단, 어떤 형태의 오류가 최소화된 그래프형태로 금방 고정될것이라는 예상과는 다르게 시계방향으로 계속 변화하는것을 확인할 수 있었으며 최종적으로는 `0.02x + 0.01y = 0.01` 형태의 그래프로 수렴하긴 했으나 오류에 큰 변화가 없음에도 꽤 긴 시간동안 지속적으로 그래프가 변화하는것을 확인할 수 있다.

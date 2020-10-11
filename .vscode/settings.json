@@ -1,3 +1,22 @@
 {
-    "python.pythonPath": "/home/user/anaconda3/bin/python"
+    "python.pythonPath": "/home/coder/anaconda3/bin/python",
+    "files.associations": {
+        "functional": "cpp",
+        "array": "cpp",
+        "atomic": "cpp",
+        "cwchar": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "exception": "cpp",
+        "random": "cpp",
+        "initializer_list": "cpp",
+        "iosfwd": "cpp",
+        "istream": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp"
+    }
 }
